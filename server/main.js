@@ -1,3 +1,4 @@
+import './reset.css'
 import './style.css'
 import nipplejs from 'nipplejs'
 import { io } from 'socket.io-client'
