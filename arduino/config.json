@@ -1,0 +1,6 @@
+{
+    "host": "http://localhost",
+    "namespace": "arduino",
+    "port": 4000,
+    "url": "http://localhost:5173/arduino"
+}
