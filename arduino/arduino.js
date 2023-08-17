@@ -51,7 +51,7 @@ board.on('ready', () => {
   // Set motor speed in the current direction when event motor:speed is received
   socket.on('motor:speed', function (normalizedSpeed) {
     motorNormalizedSpeed = normalizedSpeed
-    if (normalizedSpeed == 0) {
+    if (normalizedSpeed === 0) {
       // Force a motor to stop (as opposed to coasting). Please note that this only works on boards with a dedicated brake pin. Other boards and interfaces will simply coast.
       motor.brake()
     } else {
