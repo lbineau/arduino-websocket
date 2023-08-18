@@ -7,7 +7,7 @@ export default (server) => {
 
     socket.on('motor:speed', function (normalizedSpeed) {
       socket.broadcast.emit('motor:speed', normalizedSpeed)
-      console.log('Broadcasting: motor:speed')
+      console.log('Broadcasting: motor:speed', normalizedSpeed)
     })
 
     socket.on('motor:forward', function () {

@@ -2,6 +2,7 @@ import './reset.css'
 import './style.css'
 import nipplejs from 'nipplejs'
 import { io } from 'socket.io-client'
+import _throttle from 'lodash/throttle'
 
 const joystickSize = 300
 
@@ -11,19 +12,23 @@ const joystick = nipplejs.create({
   position: { left: '50%', top: '50%' },
   color: 'orange',
   lockY: true,
-  size: joystickSize
+  size: joystickSize,
+  multitouch: true
 })
 
 // Connect to the socket server
 const socket = io('/arduino')
 
+// debounce speed update to prevent flooding the server
+const debouncedEmitSpeed = _throttle((speed) => socket.emit('motor:speed', speed), 100)
+
 joystick.on('end', () => {
-  socket.emit('motor:speed', 0)
+  debouncedEmitSpeed(0)
 })
 
 joystick.on('move', (evt, data) => {
   const normalizedSpeed = data.distance / (joystickSize / 2)
-  socket.emit('motor:speed', normalizedSpeed)
+  debouncedEmitSpeed(normalizedSpeed)
 })
 
 joystick.on('dir:up', (evt, data) => {
