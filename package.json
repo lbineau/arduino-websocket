@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "concurrently \"npm run start -workspace=server\" \"npm run start -workspace=robot\""
+    "start": "concurrently \"npm run start --workspace=server -- --host\" \"npm run start --workspace=robot\"",
+    "startfast": "concurrently -P \"npm run preview --workspace=server -- --host\" \"npm run start --workspace=robot\""
   },
   "workspaces": [
     "robot",
