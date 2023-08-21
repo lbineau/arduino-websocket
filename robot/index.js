@@ -1,5 +1,5 @@
 const { Board, Motor } = require('johnny-five')
-const config = require('../config')
+const config = require('./config')
 const io = require('socket.io-client')
 
 // Connect to the socket server
