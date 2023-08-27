@@ -1,6 +1,8 @@
 const { Board, Motor } = require('johnny-five')
 const config = require('./config')
 const io = require('socket.io-client')
+const player = require('play-sound')()
+let audio
 
 // Connect to the socket server
 const socket = io.connect(config.url)
@@ -49,7 +51,7 @@ board.on('ready', () => {
   })
 
   // Set motor speed in the current direction when event motor:speed is received
-  socket.on('motor:speed', function (normalizedSpeed) {
+  socket.on('motor:speed', (normalizedSpeed) => {
     motorNormalizedSpeed = normalizedSpeed
     if (normalizedSpeed === 0) {
       // Force a motor to stop (as opposed to coasting). Please note that this only works on boards with a dedicated brake pin. Other boards and interfaces will simply coast.
@@ -60,12 +62,24 @@ board.on('ready', () => {
   })
 
   // Start motor at the current speed when event motor:forward is received
-  socket.on('motor:forward', function () {
+  socket.on('motor:forward', () => {
     motor.forward(motorSpeed)
   })
 
   // Start motor in reverse direction when event motor:backward is received
-  socket.on('motor:backward', function () {
+  socket.on('motor:backward', () => {
     motor.reverse(motorSpeed)
+  })
+})
+
+// Play specific sound
+socket.on('sound:play', (soundtrack) => {
+  console.log('sound:play', soundtrack)
+  audio?.kill()
+  audio = player.play(`assets/sound/chopper-sound${soundtrack}.mp3`, (err) => {
+    if (err && !err.killed) {
+      console.error(err)
+      throw err
+    }
   })
 })

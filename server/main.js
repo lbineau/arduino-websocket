@@ -50,3 +50,7 @@ socket.on('motor:backward', () => {
   // TODO add information on the interface
   console.log('motor:backward')
 })
+
+document.querySelector('.js-button-sound')?.addEventListener('click', () => {
+  socket.emit('sound:play', 1)
+})

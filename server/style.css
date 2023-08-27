@@ -34,3 +34,11 @@ body {
   height: 100%;
   left: 0;
 }
+
+.sound-container {
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  right: 0;
+  padding: 1rem;
+}
