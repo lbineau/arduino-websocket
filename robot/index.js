@@ -76,7 +76,7 @@ board.on('ready', () => {
 socket.on('sound:play', (soundtrack) => {
   console.log('sound:play', soundtrack)
   audio?.kill()
-  audio = player.play(`assets/sound/chopper-sound${soundtrack}.mp3`, (err) => {
+  audio = player.play(`assets/sound/chopper-sound${soundtrack}.wav`, (err) => {
     if (err && !err.killed) {
       console.error(err)
       throw err
