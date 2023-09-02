@@ -19,8 +19,8 @@ import SoundCtrl from './components/SoundCtrl.vue'
     "joystick"
   ;
   grid-template-rows: min-content 1fr;
-  gap: 2rem;
-  padding: 2rem;
+  gap: 1rem;
+  padding: 1rem;
 }
 .grid > * {
   padding: 1rem;

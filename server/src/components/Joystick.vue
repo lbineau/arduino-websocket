@@ -6,7 +6,7 @@ import _throttle from 'lodash/throttle'
 
 export default defineComponent({
   mounted () {
-    const joystickSize = 300
+    const joystickSize = 180
 
     const joystick = nipplejs.create({
       zone: this.$refs.joystick,
@@ -51,10 +51,8 @@ export default defineComponent({
 
 <style scoped>
 .title {
-  position: absolute;
-  top: 1rem;
-  left: 0;
-  right: 0;
+  position: relative;
+  z-index: 1;
   text-align: center;
 }
 .joystick-container {
@@ -65,12 +63,16 @@ export default defineComponent({
   content: '';
   display: block;
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  width: 90%;
+  height: 90%;
+  max-width: 40rem;
+  max-height: 40rem;
   background: url('@/assets/Republic_Emblem.svg') no-repeat center;
   opacity: 0.5;
+  background-size: contain;
 }
 
 .joystick {
