@@ -1,10 +1,12 @@
 module.exports = {
   env: {
-    es2021: true,
-    node: true
+    browser: true,
+    es2021: true
   },
-  extends: 'standard',
-  ignorePatterns: ['node_modules', 'dist'],
+  extends: [
+    'standard',
+    'plugin:vue/vue3-essential'
+  ],
   overrides: [
     {
       env: {
@@ -22,6 +24,10 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module'
   },
+  plugins: [
+    'vue'
+  ],
   rules: {
+    'vue/multi-word-component-names': 'off'
   }
 }
