@@ -4,21 +4,36 @@ import SoundCtrl from './components/SoundCtrl.vue'
 </script>
 
 <template>
-  <SoundCtrl />
-  <Joystick />
+  <div class="grid">
+    <SoundCtrl />
+    <Joystick />
+  </div>
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.grid {
+  min-height: 100%;
+  display: grid;
+  grid-template-areas:
+    "sounds"
+    "joystick"
+  ;
+  grid-template-rows: min-content 1fr;
+  gap: 2rem;
+  padding: 2rem;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+.grid > * {
+  padding: 1rem;
+  border: 2px solid;
+  box-shadow:
+    0 0 3px,
+    0 0 3px inset
+  ;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+.sound-container {
+  grid-area: "sounds";
+}
+.joystick-container {
+  grid-area: "joystick";
 }
 </style>

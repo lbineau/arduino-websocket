@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #16171f;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -17,4 +17,68 @@
 html, body, [id="app"] {
   width: 100%;
   height: 100%;
+}
+
+.font-family-aurebesh {
+  font-family: 'Aurebesh';
+}
+
+/* Aurebesh Bold Italic */
+@font-face {
+  font-family: 'Aurebesh';
+  src: url('assets/fonts/Aurebesh Bold Italic.otf') format('opentype');
+  font-weight: bold;
+  font-style: italic;
+}
+
+/* Aurebesh Condensed Bold */
+@font-face {
+  font-family: 'Aurebesh-Condensed';
+  src: url('assets/aurebesh/Aurebesh Condensed Bold.otf') format('opentype');
+  font-weight: bold;
+}
+
+/* Aurebesh Italic */
+@font-face {
+  font-family: 'Aurebesh';
+  src: url('assets/aurebesh/Aurebesh Italic.otf') format('opentype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+/* Aurebesh Bold */
+@font-face {
+  font-family: 'Aurebesh';
+  src: url('assets/aurebesh/Aurebesh Bold.otf') format('opentype');
+  font-weight: bold;
+}
+
+/* Aurebesh Condensed Italic */
+@font-face {
+  font-family: 'Aurebesh-Condensed';
+  src: url('assets/aurebesh/Aurebesh Condensed Italic.otf') format('opentype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+/* Aurebesh Regular */
+@font-face {
+  font-family: 'Aurebesh';
+  src: url('assets/aurebesh/Aurebesh.otf') format('opentype');
+  font-weight: normal;
+}
+
+/* Aurebesh Condensed Bold Italic */
+@font-face {
+  font-family: 'Aurebesh-Condensed';
+  src: url('assets/aurebesh/Aurebesh Condensed Bold Italic.otf') format('opentype');
+  font-weight: bold;
+  font-style: italic;
+}
+
+/* Aurebesh Condensed Regular */
+@font-face {
+  font-family: 'Aurebesh-Condensed';
+  src: url('assets/aurebesh/Aurebesh Condensed.otf') format('opentype');
+  font-weight: normal;
 }

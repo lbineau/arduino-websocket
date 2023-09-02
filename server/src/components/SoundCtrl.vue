@@ -12,17 +12,14 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="sound-container">
+  <div class="sound-container font-family-aurebesh">
+    <h2 class="title font-family-aurebesh">Sounds</h2>
     <button @click="onClick" class="js-button-sound">What wooo 🔈</button>
   </div>
 </template>
 
 <style scoped>
-.sound-container {
-  position: absolute;
-  z-index: 10;
-  top: 0;
-  right: 0;
-  padding: 1rem;
+.title {
+  text-align: center;
 }
 </style>
