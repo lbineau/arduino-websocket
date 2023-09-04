@@ -21,6 +21,7 @@ html, body, [id="app"] {
 
 .font-family-aurebesh {
   font-family: 'Aurebesh';
+  text-shadow: 0px 0px 5px rgba(255,255,255,0.6);
 }
 
 /* Aurebesh Bold Italic */
