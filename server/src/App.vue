@@ -18,7 +18,8 @@ import SoundCtrl from './components/SoundCtrl.vue'
     "sounds"
     "joystick"
   ;
-  grid-template-rows: min-content 1fr;
+  grid-template-rows: min-content minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
   padding: 1rem;
 }
@@ -31,9 +32,9 @@ import SoundCtrl from './components/SoundCtrl.vue'
   ;
 }
 .sound-container {
-  grid-area: "sounds";
+  grid-area: sounds;
 }
 .joystick-container {
-  grid-area: "joystick";
+  grid-area: joystick;
 }
 </style>

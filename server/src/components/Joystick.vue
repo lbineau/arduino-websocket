@@ -5,8 +5,14 @@ import nipplejs from 'nipplejs'
 import _throttle from 'lodash/throttle'
 
 export default defineComponent({
+  data () {
+    return {
+      joystickSize: 160,
+      joystickWrapperMaxSize: 640
+    }
+  },
   mounted () {
-    const joystickSize = 180
+    const joystickSize = this.joystickSize
 
     const joystick = nipplejs.create({
       zone: this.$refs.joystick,
@@ -15,8 +21,9 @@ export default defineComponent({
       color: 'white',
       // lockY: true,
       size: joystickSize,
-      multitouch: true,
-      restOpacity: 1
+      multitouch: false,
+      restOpacity: 1,
+      dynamicPage: true
     })
 
     // debounce speed update to prevent flooding the server
@@ -45,7 +52,9 @@ export default defineComponent({
 <template>
   <div class="joystick-container">
     <h2 class="title font-family-aurebesh">Joystick</h2>
-    <div class="joystick" ref="joystick"></div>
+    <div class="joystick-wrapper">
+      <div class="joystick" ref="joystick"></div>
+    </div>
   </div>
 </template>
 
@@ -57,19 +66,32 @@ export default defineComponent({
 }
 .joystick-container {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  place-items: center;
 }
 
-.joystick-container:before {
+.joystick-wrapper {
+  position: relative;
+  --size: calc(v-bind(joystickWrapperMaxSize) * 1px);
+  width: 100%;
+  height: 100%;
+  max-width: var(--size);
+  max-height: var(--size);
+  container-type: size;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.joystick-wrapper:before {
   content: '';
   display: block;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
-  width: 90%;
-  height: 90%;
-  max-width: 40rem;
-  max-height: 40rem;
+  width: 100%;
+  height: 100%;
   background: url('@/assets/Republic_Emblem.svg') no-repeat center;
   opacity: 0.5;
   background-size: contain;
@@ -90,6 +112,12 @@ export default defineComponent({
 
 .joystick:deep(.front) {
   opacity: 0.7!important;
+  --size-stick: calc(v-bind(joystickSize) * 100cqw / v-bind(joystickWrapperMaxSize));
+  --size-stick-half-negative: calc(var(--size-stick) * -0.5);
+  width: var(--size-stick) !important;
+  height: var(--size-stick) !important;
+  margin-top: var(--size-stick-half-negative) !important;
+  margin-left: var(--size-stick-half-negative) !important;
 }
 
 </style>
