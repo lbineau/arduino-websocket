@@ -7,8 +7,8 @@ import _throttle from 'lodash/throttle'
 export default defineComponent({
   data () {
     return {
-      joystickSize: 160,
-      joystickWrapperMaxSize: 640
+      joystickSize: 80,
+      joystickWrapperMaxSize: 360
     }
   },
   mounted () {
@@ -73,14 +73,14 @@ export default defineComponent({
 
 .joystick-wrapper {
   position: relative;
-  --size: calc(v-bind(joystickWrapperMaxSize) * 1px);
+  --size: clamp(200px, 100%, calc(v-bind(joystickWrapperMaxSize) * 1px));
   width: 100%;
-  height: 100%;
+  aspect-ratio: 1;
   max-width: var(--size);
-  max-height: var(--size);
   container-type: size;
   margin-top: auto;
   margin-bottom: auto;
+  filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.8));
 }
 
 .joystick-wrapper:before {

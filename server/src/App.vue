@@ -37,4 +37,12 @@ import SoundCtrl from './components/SoundCtrl.vue'
 .joystick-container {
   grid-area: joystick;
 }
+
+@media screen and (orientation: landscape) {
+  .grid {
+    grid-template-areas: "sounds joystick";
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    grid-template-rows: minmax(0, 1fr);
+  }
+}
 </style>
