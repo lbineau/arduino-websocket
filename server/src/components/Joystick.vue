@@ -27,23 +27,19 @@ export default defineComponent({
     })
 
     // debounce speed update to prevent flooding the server
-    const debouncedEmitSpeed = _throttle((speed) => socket.emit('motor:speed', speed), 100)
+    const debounceEmitJoystickUpdate = _throttle((normX, normyY, normDistance) => socket.emit('joystick:update', normX, normyY, normDistance), 100)
 
     joystick.on('end', () => {
-      debouncedEmitSpeed(0)
+      debounceEmitJoystickUpdate(0, 0, 0)
     })
 
     joystick.on('move', (evt, data) => {
-      const normalizedSpeed = data.distance / (joystickSize / 2)
-      debouncedEmitSpeed(normalizedSpeed)
-    })
-
-    joystick.on('dir:up', (evt, data) => {
-      socket.emit('motor:forward')
-    })
-
-    joystick.on('dir:down', () => {
-      socket.emit('motor:backward')
+      const normDistance = data.distance / (joystickSize / 2)
+      debounceEmitJoystickUpdate(
+        Math.cos(data.angle.radian),
+        Math.sin(data.angle.radian),
+        normDistance
+      )
     })
   }
 })
