@@ -7,7 +7,7 @@ export default (server) => {
 
     socket.on('joystick:update', (normX, normyY, normDistance) => {
       socket.broadcast.emit('joystick:update', normX, normyY, normDistance)
-      console.log('Broadcasting: joystick:update', normX, normyY, normDistance)
+      // console.log('Broadcasting: joystick:update', normX, normyY, normDistance)
     })
 
     socket.on('sound:play', (soundtrack) => {

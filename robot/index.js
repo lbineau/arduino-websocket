@@ -1,16 +1,17 @@
-import JohnnyFive from 'johnny-five'
+import five from 'johnny-five'
 import { map, clamp } from './utils.js'
 import config from './config.js'
 import io from 'socket.io-client'
 import PlaySound from 'play-sound'
 let audio
-const { Board, Motor } = JohnnyFive
+const { Board, Motor } = five
 
 // Connect to the socket server
 const socket = io.connect(config.url)
 
 // S'il y a plusieurs ports, il faut forcer un port en particulier
 // exemple sur windows new Board({ port: "COM3" })
+const board = new Board({ port: "COM3" })
 
 board.on('ready', () => {
   console.log('board ready')
@@ -30,16 +31,14 @@ board.on('ready', () => {
   const motorL = new Motor({
     pins: {
       pwm: 3,
-      dir: 12,
-      brake: 9
+      dir: 12
     }
   })
 
   const motorR = new Motor({
     pins: {
       pwm: 11,
-      dir: 13,
-      brake: 8
+      dir: 13
     }
   })
 
@@ -54,7 +53,8 @@ board.on('ready', () => {
 
   const moveMotor = (motor, normSpeed) => {
     // transform normalized speed from 0-1 to 0-255(motorMaxSpeed)
-    const speed = map(Math.abs(normSpeed), 0, 1, 0, motorMaxSpeed, true)
+    const speed = Math.round(map(Math.abs(normSpeed), 0, 1, 0, motorMaxSpeed, true))
+    console.log(Math.sign(normSpeed), speed)
     switch (Math.sign(normSpeed)) {
       case 1:
         motor.forward(speed)
@@ -79,6 +79,11 @@ board.on('ready', () => {
     moveMotor(motorL, motorLeftNormSpeed)
     moveMotor(motorR, motorRightNormSpeed)
   })
+
+  board.on("exit", () => {
+    moveMotor(motorL, 0)
+    moveMotor(motorR, 0)
+  });
 })
 
 // Play specific sound
