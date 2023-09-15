@@ -25,6 +25,7 @@ export function clamp (val, min, max) {
  * @param  {Number} stop1  upper bound of the value's current range.
  * @param  {Number} start2 lower bound of the value's target range.
  * @param  {Number} stop2  upper bound of the value's target range.
+ * @param  {Boolean} [withinBounds] constrain the value to the newly mapped range.
  * @return {Number}        remapped number.
  **/
 export function map(n, start1, stop1, start2, stop2, withinBounds) {
