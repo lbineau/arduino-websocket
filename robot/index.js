@@ -1,34 +1,16 @@
-const { Board, Motor } = require('johnny-five')
-const config = require('./config')
-const io = require('socket.io-client')
-const player = require('play-sound')()
+import JohnnyFive from 'johnny-five'
+import { map, clamp } from './utils.js'
+import config from './config.js'
+import io from 'socket.io-client'
+import PlaySound from 'play-sound'
 let audio
-console.log(('totot'))
-/**
- * Re-maps a number from one range to another.
- *
- * For example, calling `map(2, 0, 10, 0, 100)` returns 20. The first three
- * arguments set the original value to 2 and the original range from 0 to 10.
- * The last two arguments set the target range from 0 to 100. 20's position
- * in the target range [0, 100] is proportional to 2's position in the
- * original range [0, 10].
- *
- * @method map
- * @param  {Number} value  the incoming value to be converted.
- * @param  {Number} start1 lower bound of the value's current range.
- * @param  {Number} stop1  upper bound of the value's current range.
- * @param  {Number} start2 lower bound of the value's target range.
- * @param  {Number} stop2  upper bound of the value's target range.
- * @return {Number}        remapped number.
- **/
-function map (n, start1, stop1, start2, stop2) {
-  return (n - start1) / (stop1 - start1) * (stop2 - start2) + start2
-}
+const { Board, Motor } = JohnnyFive
 
 // Connect to the socket server
 const socket = io.connect(config.url)
 
-const board = new Board()
+// S'il y a plusieurs ports, il faut forcer un port en particulier
+// exemple sur windows new Board({ port: "COM3" })
 
 board.on('ready', () => {
   console.log('board ready')
@@ -71,7 +53,8 @@ board.on('ready', () => {
   const tresholdY = 0.3 // seuil minimal des départ des moteurs -0.3 | 0.3
 
   const moveMotor = (motor, normSpeed) => {
-    const speed = map(Math.abs(normSpeed), 0, 1, 0, motorMaxSpeed)
+    // transform normalized speed from 0-1 to 0-255(motorMaxSpeed)
+    const speed = map(Math.abs(normSpeed), 0, 1, 0, motorMaxSpeed, true)
     switch (Math.sign(normSpeed)) {
       case 1:
         motor.forward(speed)
@@ -101,6 +84,7 @@ board.on('ready', () => {
 // Play specific sound
 socket.on('sound:play', (soundtrack) => {
   console.log('sound:play', soundtrack)
+  const player = new PlaySound()
   audio?.kill()
   audio = player.play(`assets/sound/chopper-sound${soundtrack}.wav`, (err) => {
     if (err && !err.killed) {
