@@ -7,6 +7,9 @@ Ce projet vise à programmer un robot "Chopper" en combinant la puissance d'un p
   - [Table des matières](#table-des-matières)
   - [Prérequis](#prérequis)
   - [Installation](#installation)
+    - [Sur ordinateur :](#sur-ordinateur-)
+    - [Sur l'Arduino : (à mettre à jour)](#sur-larduino--à-mettre-à-jour)
+  - [Configuration](#configuration)
   - [Utilisation](#utilisation)
   - [Structure du Projet (TODO)](#structure-du-projet-todo)
   - [Contributions](#contributions)
@@ -16,34 +19,56 @@ Ce projet vise à programmer un robot "Chopper" en combinant la puissance d'un p
 
 Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur votre système :
 
+- **IMPORTANT: Si Windows et AVANT installation de Node** Dans un Powershell en mode Administrateur: **Set-ExecutionPolicy AllSigned** (source https://www.geekbits.io/how-to-install-chocolatey-on-windows-11/#check-powershell-execution-policy)
 - [Node.js](https://nodejs.org/) (version recommandée)
+  - **IMPORTANT: dans l'installer de Node** Bien cocher la même case **"Automatically install necessary tools"**
+  Cela va installer **Python** et **node-gyp** qui sont obligatoires au bon fonctionnement de JohnnyFive (https://github.com/rwaldron/johnny-five/wiki/Getting-Started#prerequisites)
 - [npm](https://www.npmjs.com/) (est généralement inclus dans l'installation de Node.js)
-- Une carte Arduino compatible avec la bibliothèque [Johnny-Five](http://johnny-five.io/)
+- Installer l'[IDE d'Arduino](https://www.arduino.cc/en/software) pour qu'il install les drivers nécessaires
+- Brancher une carte Arduino compatible avec la bibliothèque [Johnny-Five](http://johnny-five.io/)
 
 ## Installation
 
-1. Sur ordinateur :
-    - Clonez le dépôt :
+### Sur ordinateur :
+1. Dans l'IDE Arduino
+   - Sélectionnez la bonne board
+   ![](README-assets/arduino-port.png)
+   - Afficher le Sketch StandardFirmataPlus.ino
+   ![](README-assets/standardfirmataplus.png)
+   - Uploadez le sur la board Arduino, comme n'importe quel programme Arduino
+   ![](README-assets/arduino-upload.png)
+   - Quittez l'IDE
 
-    ```bash
-    git clone https://github.com/lbineau/arduino-websocket
-    ```
+2. Dans un terminal
+   - Clonez le dépôt :
+
+   ```bash
+   git clone https://github.com/lbineau/arduino-websocket
+   ```
 
    - Accédez au répertoire du projet :
 
-    ```bash
-    cd arduino-websocket
-    ```
+   ```bash
+   cd arduino-websocket
+   ```
 
    - Installez les dépendances pour les deux espaces de travail :
 
-    ```bash
-    npm install
-    ```
+   ```bash
+   npm install
+   ```
 
-2. Sur l'Arduino : (à mettre à jour)
-    - Connecter la commande de direction sur le pin 3
-    - Connecter la commande de puissance sur le pin 12
+### Sur l'Arduino : (à mettre à jour)
+  - Connecter la commande de direction sur le pin 3
+  - Connecter la commande de puissance sur le pin 12
+
+
+## Configuration
+
+- Adapter le port de la board Arduino si necessaire dans `robot/index.js` (vous le trouvez dans l'IDE d'Arduino)
+```js
+const board = new Board({ port: "COM3" })
+```
 
 ## Utilisation
 
