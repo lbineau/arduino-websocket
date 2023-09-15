@@ -27,7 +27,7 @@ html, body, [id="app"] {
 /* Aurebesh Bold Italic */
 @font-face {
   font-family: 'Aurebesh';
-  src: url('assets/fonts/Aurebesh Bold Italic.otf') format('opentype');
+  src: url('assets/aurebesh/Aurebesh Bold Italic.otf') format('opentype');
   font-weight: bold;
   font-style: italic;
 }
