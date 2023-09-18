@@ -1,5 +1,5 @@
 import five from 'johnny-five'
-import { map, clamp } from './utils.js'
+import { map } from './utils.js'
 import config from './config.js'
 import io from 'socket.io-client'
 import PlaySound from 'play-sound'
@@ -11,7 +11,7 @@ const socket = io.connect(config.url)
 
 // S'il y a plusieurs ports, il faut forcer un port en particulier
 // exemple sur windows new Board({ port: "COM3" })
-const board = new Board({ port: "COM3" })
+const board = new Board()
 
 board.on('ready', () => {
   console.log('board ready')
@@ -80,10 +80,10 @@ board.on('ready', () => {
     moveMotor(motorR, motorRightNormSpeed)
   })
 
-  board.on("exit", () => {
+  board.on('exit', () => {
     moveMotor(motorL, 0)
     moveMotor(motorR, 0)
-  });
+  })
 })
 
 // Play specific sound
