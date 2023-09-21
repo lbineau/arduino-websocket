@@ -1,8 +1,8 @@
 import five from 'johnny-five'
-import { map } from './utils.js'
 import config from './config.js'
 import io from 'socket.io-client'
 import PlaySound from 'play-sound'
+import { gsap } from 'gsap'
 let audio
 const { Board, Motor } = five
 
@@ -11,7 +11,46 @@ const socket = io.connect(config.url)
 
 // S'il y a plusieurs ports, il faut forcer un port en particulier
 // exemple sur windows new Board({ port: "COM3" })
-const board = new Board()
+const board = new Board({
+  repl: false
+})
+
+const motorMaxSpeed = 255 // speed 0-255
+const tresholdX = 0.3 // seuil minimal des départ des moteurs -0.3 | 0.3
+const tresholdY = 0.3 // seuil minimal des départ des moteurs -0.3 | 0.3
+const tweenDuration = 3 // durée d'interpolation entre 2 valeurs de moteur
+const motorVars = {
+  normSpeedL: 0,
+  normSpeedR: 0
+}
+
+const normSpeedLTo = gsap.quickTo(motorVars, 'normSpeedL', { duration: tweenDuration })
+const normSpeedRTo = gsap.quickTo(motorVars, 'normSpeedR', { duration: tweenDuration })
+
+// transform normSpeed to speed
+const normSpeedToSpeed = gsap.utils.pipe(
+  // transform normalized speed from 0-1 to 0-255(motorMaxSpeed)
+  gsap.utils.mapRange(0, 1, 0, motorMaxSpeed),
+  // increase by 10
+  gsap.utils.snap(20),
+  // force to stay between 0-255(motorMaxSpeed)
+  gsap.utils.clamp(0, motorMaxSpeed)
+)
+
+// Set motor speed in the current direction when event motor:speed is received
+socket.on('joystick:update', (normX, normY, normDistance) => {
+  let motorLeftNormSpeed = 0
+  let motorRightNormSpeed = 0
+  // Si le joystick n'est pas au centre (en tenant compte du seuil)
+  if (!(normX < tresholdX && normX > -tresholdX && normY < tresholdY && normY > -tresholdY)) {
+    motorLeftNormSpeed = (normY + normX) * normDistance
+    motorRightNormSpeed = (normY - normX) * normDistance
+  }
+  // tween number
+  normSpeedLTo(motorLeftNormSpeed)
+  // tween number
+  normSpeedRTo(motorRightNormSpeed)
+})
 
 board.on('ready', () => {
   console.log('board ready')
@@ -42,19 +81,9 @@ board.on('ready', () => {
     }
   })
 
-  board.repl.inject({
-    motorL,
-    motorR
-  })
-
-  const motorMaxSpeed = 255 // speed 0-255
-  const tresholdX = 0.3 // seuil minimal des départ des moteurs -0.3 | 0.3
-  const tresholdY = 0.3 // seuil minimal des départ des moteurs -0.3 | 0.3
-
   const moveMotor = (motor, normSpeed) => {
-    // transform normalized speed from 0-1 to 0-255(motorMaxSpeed)
-    const speed = Math.round(map(Math.abs(normSpeed), 0, 1, 0, motorMaxSpeed, true))
-    console.log(Math.sign(normSpeed), speed)
+    const speed = normSpeedToSpeed(Math.abs(normSpeed))
+
     switch (Math.sign(normSpeed)) {
       case 1:
         motor.forward(speed)
@@ -67,20 +96,20 @@ board.on('ready', () => {
     }
   }
 
-  // Set motor speed in the current direction when event motor:speed is received
-  socket.on('joystick:update', (normX, normY, normDistance) => {
-    let motorLeftNormSpeed = 0
-    let motorRightNormSpeed = 0
-    // Si le joystick n'est pas au centre (en tenant compte du seuil)
-    if (!(normX < tresholdX && normX > -tresholdX && normY < tresholdY && normY > -tresholdY)) {
-      motorLeftNormSpeed = (normY + normX) * normDistance
-      motorRightNormSpeed = (normY - normX) * normDistance
-    }
-    moveMotor(motorL, motorLeftNormSpeed)
-    moveMotor(motorR, motorRightNormSpeed)
-  })
+  // everytime the motor variables changes, call moveMoto()
+  normSpeedLTo.tween.eventCallback('onUpdate', function (motor, vars) {
+    moveMotor(motor, vars.normSpeedL)
+  }, [motorL, motorVars])
+  normSpeedRTo.tween.eventCallback('onUpdate', function (motor, vars) {
+    moveMotor(motor, vars.normSpeedR)
+  }, [motorR, motorVars])
 
   board.on('exit', () => {
+    // kill tweens
+    normSpeedLTo.tween.kill()
+    normSpeedRTo.tween.kill()
+
+    // stop motors
     moveMotor(motorL, 0)
     moveMotor(motorR, 0)
   })
@@ -98,3 +127,4 @@ socket.on('sound:play', (soundtrack) => {
     }
   })
 })
+ 
